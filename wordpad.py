@@ -22,24 +22,22 @@ model = tf.keras.models.load_model("digits_model")
 
 
 def digPredict(gameDisplay):
-    '''
+    """
     Digits prediction
-    '''
-    data = pygame.image.tostring(gameDisplay, 'RGBA')
-    img = Image.frombytes('RGBA', (SCREEN_WIDTH, SCREEN_HEIGHT), data)
+    """
+    data = pygame.image.tostring(gameDisplay, "RGBA")
+    img = Image.frombytes("RGBA", (SCREEN_WIDTH, SCREEN_HEIGHT), data)
     img = resizeimage.resize_cover(img, [28, 28])
     imgobj = np.asarray(img)
     imgobj = cv2.cvtColor(imgobj, cv2.COLOR_RGB2GRAY)
-    (_, imgobj) = cv2.threshold(imgobj, 128,
-                                255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    (_, imgobj) = cv2.threshold(imgobj, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
     # Predicting
-    imgobj = imgobj/255
-    b = model.predict(np.reshape(
-        imgobj, [1, imgobj.shape[0], imgobj.shape[1], 1]))
-    print('*'*15)
-    print(f'b : {np.argmax(b)}')
-    print('b', b, 'b[0]', b[0][np.argmax(b)])
-    ans = (np.argmax(b) if b[0][np.argmax(b)] > 0.5 else '?')
+    imgobj = imgobj / 255
+    b = model.predict(np.reshape(imgobj, [1, imgobj.shape[0], imgobj.shape[1], 1]))
+    print("*" * 15)
+    print(f"b : {np.argmax(b)}")
+    print("b", b, "b[0]", b[0][np.argmax(b)])
+    ans = np.argmax(b) if b[0][np.argmax(b)] > 0.5 else "?"
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -56,11 +54,11 @@ def digPredict(gameDisplay):
         pygame.display.update()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pygame.init()
-    font = pygame.font.Font('freesansbold.ttf', 30)
+    font = pygame.font.Font("freesansbold.ttf", 30)
     FPS_CLOCK = pygame.time.Clock()
-    pygame.display.set_caption('WordPad')
+    pygame.display.set_caption("WordPad")
     SCREEN.fill(BLACK)
     pygame.display.update()
     FPS_CLOCK.tick(FPS)
